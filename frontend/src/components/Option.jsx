@@ -31,14 +31,14 @@ const Option = () => {
         // }
     ];
     return (
-        <div className=' bg-sky-300 w-screen h-screen flex flex-col gap-1 justify-center items-center overflow-hidden '>
+        <div className='bg-sky-50 w-screen h-screen flex flex-col gap-1 justify-center items-center overflow-hidden '>
             <div className='m-8'>
-                <h1 className='text-4xl text-center font-medium text-white'>Veuillez choisir votre spécialité</h1>
+                <h1 className='text-4xl text-center font-medium text-black'>Veuillez choisir votre spécialité</h1>
             </div>
             <div className='w-full h-full flex flex-wrap items-center justify-center gap-4'>
 
                 {specialist.map((item) => (
-                    <Link className='specialist w-2/6 h-2/5 bg-white flex items-center justify-center rounded-md font-bold text-3xl text-neutral-500 hover:bg-sky-100' key={item.id} to={item.link}>
+                    <Link className='specialist w-2/6 h-2/5 bg-sky-500 flex items-center justify-center rounded-md font-bold text-3xl text-white hover:bg-sky-300' key={item.id} to={item.link}>
                         {item.name}
                     </Link>
                 ))}
