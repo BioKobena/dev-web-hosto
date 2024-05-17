@@ -7,38 +7,33 @@ const Option = () => {
         {
             id: 1,
             name: 'Infirmier',
-            link: '/infirmier' // Ajoutez les liens correspondants à chaque spécialité
         },
         {
             id: 2,
             name: 'Medecin',
-            link: '/medecin'
         },
         {
             id: 3,
             name: 'Sage femme',
-            link: '/sage-femme'
         },
         {
             id: 4,
             name: 'Receptionniste',
-            link: '/receptionniste'
         },
-        // {
-        //     id: 5,
-        //     name: 'Laboratoire',
-        //     link: '/laboratoire'
-        // }
+        {
+            id: 5,
+            name: 'Aide Soignante',
+        }
     ];
     return (
-        <div className='bg-sky-50 w-screen h-screen flex flex-col gap-1 justify-center items-center overflow-hidden '>
+        <div className='bg-sky-50 w-screen h-screen flex flex-col  gap-1 justify-center items-center'>
             <div className='m-8'>
                 <h1 className='text-4xl text-center font-medium text-black'>Veuillez choisir votre spécialité</h1>
             </div>
             <div className='w-full h-full flex flex-wrap items-center justify-center gap-4'>
 
                 {specialist.map((item) => (
-                    <Link className='specialist w-2/6 h-2/5 bg-sky-500 flex items-center justify-center rounded-md font-bold text-3xl text-white hover:bg-sky-300' key={item.id} to={item.link}>
+                    <Link className='specialist w-2/6 h-1/5 bg-sky-500 flex items-center justify-center rounded-md font-bold text-3xl text-white hover:bg-sky-300' key={item.id} to={"/connexion"}>
                         {item.name}
                     </Link>
                 ))}

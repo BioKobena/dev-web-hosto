@@ -1,7 +1,12 @@
 * {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Sora", sans-serif;
+}
+
+body {
+  font-family: "Montserrat", "Poppins", sans-serif;
 }
 
 .specialist:hover {
   cursor: pointer;
 }
+
