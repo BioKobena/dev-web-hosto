@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Navbar = ({ specialite }) => {
+const Navbar = ({ specialite, handleLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -38,7 +38,7 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/infirmier/accueil"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     Accueil
@@ -48,7 +48,7 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/infirmier/patient"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     Patients
@@ -62,7 +62,7 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/medecin/consultation"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     Consultation
@@ -72,7 +72,7 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/medecin/rdv"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     Rendez-vous
@@ -86,7 +86,7 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/sage-femme/patientes"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     Patientes
@@ -96,7 +96,7 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/sage-femme/rdv"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     RDV
@@ -108,9 +108,9 @@ const Navbar = ({ specialite }) => {
               <>
                 <li>
                   <NavLink
-                    to="/receptionniste/dossier"
+                    to="/receptionniste/dossier/nouveau"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     Dossier
@@ -120,10 +120,20 @@ const Navbar = ({ specialite }) => {
                   <NavLink
                     to="/receptionniste/rdv"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     RDV
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/receptionniste/list-dossier"
+                    className={({ isActive }) =>
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
+                    }
+                  >
+                    Liste dossiers
                   </NavLink>
                 </li>
               </>
@@ -137,14 +147,14 @@ const Navbar = ({ specialite }) => {
                       `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'border border-blue-700 text-blue-800' : ''}`
                     }
                   >
-                   Liste patients
+                    Liste patients
                   </NavLink>
                 </li>
                 {/* <li>
                   <NavLink
                     to="/aide-soignante"
                     className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-blue-800 text-2xl border-8' : ''}`
+                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
                     RDV
@@ -157,6 +167,7 @@ const Navbar = ({ specialite }) => {
                 to="/"
                 className="block ont-semibold text-xl p-2 border-red-800 border-2 text-white bg-red-800 rounded "
                 aria-current="page"
+                onClick={handleLogout}
               >
                 Se déconnecter
               </NavLink>

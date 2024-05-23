@@ -1,36 +1,24 @@
-import * as React from 'react';
-import { Dialog, DialogTitle, TextField, Table, Paper, Button, TableRow, TableHead, TableContainer, TableCell, TableBody, Modal, Box, Grid } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useState, useEffect } from 'react';
+import { Table, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Modal, Box, CircularProgress } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function PatientAide() {
-
-    const [openModal, setOpenModal] = React.useState(false);
-    const [selectedRow, setSelectedRow] = React.useState(null);
-
-
-    const [formData, setFormData] = React.useState({
-        field1: '',
-        field2: '',
-        field3: '',
-        field4: '',
-        field5: '',
-        field6: '',
-        field7: '',
+    const [patients, setPatients] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedPatient, setSelectedPatient] = useState(null);
+    const [formData, setFormData] = useState({
+        poids: '',
+        taille: '',
+        temperature: '',
+        tension: '',
     });
+
+    useEffect(() => {
+        fetch('http://localhost:8888/hosto-project/aide-soignante/get_patients.php')
+            .then(response => response.json())
+            .then(data => setPatients(data))
+            .catch(error => console.error('Error fetching patients:', error));
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -42,14 +30,26 @@ export default function PatientAide() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Envoyer les données du formulaire ici
-        console.log(formData);
-        handleCloseModal();
+
+        const updatedData = { ...formData, NUMERODOSSIER: selectedPatient.NUMERODOSSIER };
+
+        fetch('http://localhost:8888/hosto-project/aide-soignante/update_dossier.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            handleCloseModal();
+        })
+        .catch(error => console.error('Error updating patient:', error));
     };
 
-
-    const handleRowClick = (row) => {
-        setSelectedRow(row);
+    const handleRowClick = (patient) => {
+        setSelectedPatient(patient);
         setOpenModal(true);
     };
 
@@ -59,42 +59,42 @@ export default function PatientAide() {
 
     return (
         <>
-            <h1 className='text-2xl font-semibold text-sky-900 text-center p-4'>Liste des patients à examiner</h1>
-            <TableContainer component={Paper} style={{ padding: 5 }} elevation={1} >
+            <h1 className='text-3xl font-semibold text-sky-900 text-center p-4'>Constantes à prendre</h1>
+            <TableContainer component={Paper} style={{ padding: 5 }} elevation={1}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead >
-                        <TableRow hover>
-                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }}>Nom & Prénoms</TableCell>
-                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Âge</TableCell>
-                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Taille</TableCell>
-                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Nationalité</TableCell>
-                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Status</TableCell>
-                            {/* <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Actions</TableCell> */}
+                    <TableHead>
+                        <TableRow>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }}>Nom</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Prénom</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Date de naissance</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Lieu de naissance</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Sexe</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Profession</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Contact</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Email</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Groupe sanguin</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Antécédents</TableCell>
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white", fontWeight: "900" }} align="left">Habitation</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {patients.map((patient) => (
                             <TableRow
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleRowClick(row)}
-                                key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                key={patient.NUMERODOSSIER}
+                                onClick={() => handleRowClick(patient)}
+                                sx={{ cursor: "pointer", '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row">
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
-                                <TableCell align="right">
-                                    {row.status === 'Pending' ? (
-                                        <CircularProgress size={20} />
-                                    )
-                                        : (
-                                            <CheckCircleIcon color="success" />
-                                        )
-                                    }
-                                </TableCell>
+                                <TableCell>{patient.NOM}</TableCell>
+                                <TableCell align="left">{patient.PRENOM}</TableCell>
+                                <TableCell align="left">{patient.DATENAISSANCE}</TableCell>
+                                <TableCell align="left">{patient.LIEUNAISSANCE}</TableCell>
+                                <TableCell align="left">{patient.SEXE}</TableCell>
+                                <TableCell align="left">{patient.PROFESSION}</TableCell>
+                                <TableCell align="left">{patient.CONTACT}</TableCell>
+                                <TableCell align="left">{patient.EMAIL}</TableCell>
+                                <TableCell align="left">{patient.GROUPESANGUIN}</TableCell>
+                                <TableCell align="left">{patient.ANTECEDANTS}</TableCell>
+                                <TableCell align="left">{patient.HABITATION}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -120,81 +120,62 @@ export default function PatientAide() {
                             borderRadius: 5
                         }}
                     >
-                        <h1 className='text-2xl text-blue-500 text-center font-semibold'>Prise des constantes</h1>
-
-                        <h2 id="modal-title">{selectedRow && selectedRow.name}</h2>
-                        <form onSubmit={handleSubmit}>
-                            <Grid>
-                                <TextField
-                                    sx={{ border: "none" }}
-                                    name="field1"
-                                    label="Field 1"
-                                    variant="standard"
-                                    fullWidth
-                                    value={formData.field1}
+                        <h1 className='bg-gray-100 p-3 text-2xl text-sky-800 text-center font-semibold'>Prise des constantes</h1>
+                        <h2 className='text-xl text-center font-semibold p-2' id="modal-title">{selectedPatient && `${selectedPatient.NOM} ${selectedPatient.PRENOM}`}</h2>
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                            <div>
+                                <label htmlFor="poids" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Poids</label>
+                                <input
+                                    required
+                                    type="text"
+                                    name="poids"
+                                    id="poids"
+                                    value={formData.poids}
                                     onChange={handleInputChange}
-                                    margin="normal"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Poids"
                                 />
-                                <TextField
-                                    sx={{ border: "none" }}
-                                    name="field2"
-                                    label="Field 2"
-                                    variant="standard"
-                                    fullWidth
-                                    value={formData.field2}
+                            </div>
+                            <div>
+                                <label htmlFor="tension" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tension</label>
+                                <input
+                                    required
+                                    type="text"
+                                    name="tension"
+                                    id="tension"
+                                    value={formData.tension}
                                     onChange={handleInputChange}
-                                    margin="normal"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Tension"
                                 />
-                            </Grid>
-                            <TextField
-                                name="field3"
-                                label="Field 3"
-                                variant="standard"
-                                fullWidth
-                                value={formData.field3}
-                                onChange={handleInputChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                name="field4"
-                                label="Field 4"
-                                variant="standard"
-                                fullWidth
-                                value={formData.field4}
-                                onChange={handleInputChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                name="field5"
-                                label="Field 5"
-                                variant="standard"
-                                fullWidth
-                                value={formData.field5}
-                                onChange={handleInputChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                name="field6"
-                                label="Field 6"
-                                variant="standard"
-                                fullWidth
-                                value={formData.field6}
-                                onChange={handleInputChange}
-                                margin="normal"
-                            />
-                            <TextField
-                                name="field7"
-                                label="Field 7"
-                                variant="standard"
-
-                                fullWidth
-                                value={formData.field7}
-                                onChange={handleInputChange}
-                                margin="normal"
-                            />
-                            <Button type="submit" variant="contained" color="primary" fullWidth>
-                                Enregistrer
-                            </Button>
+                            </div>
+                            <div>
+                                <label htmlFor="taille" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Taille</label>
+                                <input
+                                    required
+                                    type="text"
+                                    name="taille"
+                                    id="taille"
+                                    value={formData.taille}
+                                    onChange={handleInputChange}
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Taille"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="temperature" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Temperature</label>
+                                <input
+                                    required
+                                    type="text"
+                                    name="temperature"
+                                    id="temperature"
+                                    value={formData.temperature}
+                                    onChange={handleInputChange}
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Temperature"
+                                />
+                            </div>
+                            <button type="submit" className="w-full text-white bg-sky-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Enregistrer les informations</button>
                         </form>
                     </Box>
                 </Modal>

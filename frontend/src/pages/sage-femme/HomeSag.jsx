@@ -15,10 +15,6 @@ const HomeSag = () => {
     return (
         <>
             <Navbar specialite={specialite} />
-            <div className='bg-gray-50 w-screen h-screen'>
-                Bienvenue sur ma page
-            </div>
-            <FooterComponenet />
         </>
     )
 }

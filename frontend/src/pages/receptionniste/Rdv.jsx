@@ -69,7 +69,7 @@ export default function Rdv() {
                             <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Taille</TableCell>
                             <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Nationalité</TableCell>
                             <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Status</TableCell>
-                            {/* <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Actions</TableCell> */}
+                            <TableCell style={{ backgroundColor: "rgb(34 211 238)", color: "white" }} align="right">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

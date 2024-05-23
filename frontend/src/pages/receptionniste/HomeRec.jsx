@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
-import { FooterComponenet } from '../../components/Footer';
+import { ToastContainer, toast } from 'react-toastify';
 
 const HomeRec = () => {
+
+    const location = useLocation()
+
     const specialite = 'receptionniste';
 
     useEffect(() => {
+        if (location.state && location.state.message) {
+            toast.success(`${location.state.message} 🥳`);
+        }
         window.document.title = "Accueil Receptionniste";
-    }, []);
+    }, [location]);
 
     return (
         <div>
             <Navbar specialite={specialite} />
-            <div className='flex justify-center items-center'>
+            <ToastContainer />
+            <div className='flex justify-center'>
                 <Outlet />
             </div>
-            {/* <FooterComponenet /> */}
         </div>
     );
 }

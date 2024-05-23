@@ -19,6 +19,7 @@ import Consultation from './pages/medecin/Consultation';
 import Details from './pages/medecin/Details';
 import RdvMed from './pages/medecin/RdvMed';
 import ConsultationDetails from './pages/medecin/ConsultationDetails';
+import ListDossier from './pages/receptionniste/ListDossier';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="ancien" element={<Ancien />} />
           </Route>
           <Route path="rdv" element={<Rdv />} />
+          <Route path="list-dossier" element={<ListDossier />} />
         </Route>
 
         {/* Page de l'infirmier et ses onglets */}
@@ -49,7 +51,7 @@ function App() {
         {/* Page du medecin et ses onglets */}
         <Route path="/medecin/*" element={<HomeMed />}>
           <Route index path="consultation" element={<Consultation />} />
-          <Route path="consultation/:id" element={<ConsultationDetails />} />
+          <Route path="consultation/:numerodossier" element={<ConsultationDetails />} />
           <Route index path="rdv" element={<RdvMed />} />
 
         </Route>

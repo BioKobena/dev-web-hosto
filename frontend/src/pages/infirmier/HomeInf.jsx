@@ -14,8 +14,9 @@ const HomeInf = () => {
     return (
         <>
             <Navbar specialite={specialite} />
-            <Outlet />
-            <FooterComponenet />
+            <div className='flex justify-center items-center'>
+                <Outlet />
+            </div>
         </>
     )
 }
