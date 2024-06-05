@@ -5,6 +5,12 @@ const Ancien = () => {
     const [numerodossier, setNumerodossier] = useState('');
     const [patientData, setPatientData] = useState(null);
     const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [rdvData, setRdvData] = useState({
+        dateRdv: '',
+        heureRdv: '',
+        motif: ''
+    });
 
     const handleInputChange = (e) => {
         setNumerodossier(e.target.value);
@@ -25,6 +31,33 @@ const Ancien = () => {
         } catch (err) {
             setPatientData(null);
             setError("Erreur de requête");
+        }
+    };
+
+    const handleRdvChange = (e) => {
+        const { name, value } = e.target;
+        setRdvData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleRdvSubmit = async () => {
+        try {
+            const response = await axios.post('http://localhost:8888/hosto-project/medecin/add_rdv.php', {
+                numerodossier,
+                date_rdv: rdvData.dateRdv,
+                heure_rdv: rdvData.heureRdv,
+                motif: rdvData.motif
+            });
+            if (response.data.status === 'success') {
+                alert('Rendez-vous ajouté avec succès');
+                setShowModal(false);
+            } else {
+                alert(response.data.message);
+            }
+        } catch (err) {
+            alert('Erreur lors de l\'ajout du rendez-vous');
         }
     };
 
@@ -63,6 +96,63 @@ const Ancien = () => {
                     <p>Groupe sanguin: {patientData.GROUPESANGUIN}</p>
                     <p>Antécédants: {patientData.ANTECEDANTS}</p>
                     <p>Habitation: {patientData.HABITATION}</p>
+                    <button 
+                        className="mt-4 bg-green-500 text-white p-2 rounded"
+                        onClick={() => setShowModal(true)}
+                    >
+                        Prendre RDV
+                    </button>
+                </div>
+            )}
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded">
+                        <h2 className="text-xl font-semibold mb-4">Prendre un rendez-vous</h2>
+                        <div>
+                            <label htmlFor="dateRdv" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date RDV</label>
+                            <input 
+                                type="date" 
+                                name="dateRdv" 
+                                id="dateRdv" 
+                                value={rdvData.dateRdv}
+                                onChange={handleRdvChange}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="heureRdv" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Heure RDV</label>
+                            <input 
+                                type="time" 
+                                name="heureRdv" 
+                                id="heureRdv" 
+                                value={rdvData.heureRdv}
+                                onChange={handleRdvChange}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="motif" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Motif</label>
+                            <textarea 
+                                name="motif" 
+                                id="motif" 
+                                value={rdvData.motif}
+                                onChange={handleRdvChange}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            ></textarea>
+                        </div>
+                        <button 
+                            className="mt-4 bg-blue-500 text-white p-2 rounded"
+                            onClick={handleRdvSubmit}
+                        >
+                            Ajouter RDV
+                        </button>
+                        <button 
+                            className="mt-4 bg-red-500 text-white p-2 rounded ml-4"
+                            onClick={() => setShowModal(false)}
+                        >
+                            Annuler
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

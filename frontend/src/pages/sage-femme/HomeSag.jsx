@@ -1,7 +1,6 @@
 import React, { useEffect,useState} from 'react'
 import Navbar from '../../components/Navbar'
-import { FooterComponenet } from '../../components/Footer';
-
+import { Outlet } from 'react-router-dom';
 
 const HomeSag = () => {
     const specialite = 'sage-femme';

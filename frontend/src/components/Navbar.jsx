@@ -36,22 +36,12 @@ const Navbar = ({ specialite, handleLogout }) => {
               <>
                 <li>
                   <NavLink
-                    to="/infirmier/accueil"
-                    className={({ isActive }) =>
-                      `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
-                    }
-                  >
-                    Accueil
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
                     to="/infirmier/patient"
                     className={({ isActive }) =>
                       `block py-2 px-3 text-gray-900 font-semibold text-xl rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent ${isActive ? 'text-sky-800 text-2xl border-8' : ''}`
                     }
                   >
-                    Patients
+                    Vaccins & Pansements
                   </NavLink>
                 </li>
               </>

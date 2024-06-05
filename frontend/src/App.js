@@ -20,6 +20,7 @@ import Details from './pages/medecin/Details';
 import RdvMed from './pages/medecin/RdvMed';
 import ConsultationDetails from './pages/medecin/ConsultationDetails';
 import ListDossier from './pages/receptionniste/ListDossier';
+import Accouchement from './pages/sage-femme/Accouchement';
 
 function App() {
   return (
@@ -39,13 +40,12 @@ function App() {
 
         {/* Page de l'infirmier et ses onglets */}
         <Route path="/infirmier/*" element={<HomeInf />}>
-          <Route index path="accueil" element={<PatientMed />} />
           <Route path="patient" element={<Vaccin />} />
         </Route>
 
         {/* Page de la sage femme */}
         <Route path="/sage-femme/*" element={<HomeSag />}>
-
+          <Route path="patientes" element={<Accouchement />} />
         </Route>
 
         {/* Page du medecin et ses onglets */}

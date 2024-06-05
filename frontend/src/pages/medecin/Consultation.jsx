@@ -28,25 +28,6 @@ const Consultation = () => {
     fetchDossiers();
   }, []);
 
-  const handleConsultation = async (numeroDossier) => {
-    try {
-      // Mettre à jour le statut dans la base de données
-      await axios.post('http://localhost:8888/hosto-project/dossier/update_status.php', {
-        numeroDossier: numeroDossier,
-        newStatus: 'Finish' // Modifier le statut de "Pending" à "Finish"
-      });
-      // Mettre à jour l'état local pour refléter le changement
-      setDossiers(prevDossiers => prevDossiers.map(dossier => {
-        if (dossier.NUMERODOSSIER === numeroDossier) {
-          return { ...dossier, statut: 'Finish' };
-        }
-        return dossier;
-      }));
-    } catch (err) {
-      console.error("Erreur lors de la mise à jour du statut :", err);
-    }
-  };
-
   return (
     <div className="bg-gray-50 w-full mt-7 overflow-hidden">
       <div className="container mx-auto">
@@ -74,18 +55,15 @@ const Consultation = () => {
                   <td className="text-left py-3 px-4">{dossier.SEXE}</td>
                   <td className="text-left py-3 px-4">
                     {dossier.statut === 'Pending' ? (
-                      <CircularProgress size={20} />
-                    ) : (
                       <CheckCircleIcon color="success" />
+                    ) : (
+                      <CircularProgress size={20} />
+
                     )}
                   </td>
                   <td className="text-left py-3 px-4">
                     <Link to={`/medecin/consultation/${dossier.NUMERODOSSIER}`}>
-                      <button 
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleConsultation(dossier.NUMERODOSSIER)}
-                        disabled={dossier.statut !== 'Pending'} // Désactiver le bouton si le statut n'est pas "Pending"
-                      >
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         {dossier.STATUS === 'Pending' ? 'Consulter' : 'Voir les détails'}
                       </button>
                     </Link>

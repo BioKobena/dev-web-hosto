@@ -7,11 +7,10 @@ const ConsultationDetails = () => {
     const { numerodossier } = useParams();
     const [diagnostic, setDiagnostic] = useState('');
     const [prescription, setPrescription] = useState('');
-    const [actemedical, setActeMedical] = useState('');
-    const [constantes, setConstantes] = useState('');
+    const [acteMedical, setActeMedical] = useState('');
     const [dateControle, setDateControle] = useState('');
     const [observations, setObservations] = useState('');
-
+    const [constantData, setConstantData] = useState(null);
     const [patientData, setPatientData] = useState(null);
     const [error, setError] = useState('');
 
@@ -24,6 +23,7 @@ const ConsultationDetails = () => {
                 if (response.data.status === "success") {
                     setPatientData(response.data.data);
                     setError('');
+                    fetchConstantes();
                 } else {
                     setError(response.data.message);
                 }
@@ -35,15 +35,81 @@ const ConsultationDetails = () => {
         fetchPatientData();
     }, [numerodossier]);
 
+    const fetchConstantes = async () => {
+        try {
+            const response = await axios.get('http://localhost:8888/hosto-project/medecin/get_constantes.php', {
+                params: { numerodossier }
+            });
+            console.log(response)
+            if (response.data.status === "success") {
+                setConstantData(response.data.data);
+                setError('');
+            } else {
+                setError(response.data.message);
+            }
+        } catch (err) {
+            setError("Erreur lors de la récupération des constantes");
+        }
+    };
+
     useEffect(() => {
         if (patientData) {
             window.document.title = `Consultation de ${patientData.NOM}`;
         }
     }, [patientData]);
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     // Vérifier que la date de contrôle est une date future
+    //     const today = new Date().toISOString().split('T')[0];
+    //     if (dateControle <= today) {
+    //         setError("La date de contrôle doit être une date future");
+    //         toast.warn("La date de contrôle doit être une date future !!!");
+    //         return;
+    //     }
+    //     try {
+    //         if (!diagnostic || !prescription || !acteMedical || !dateControle || !observations) {
+    //             setError("Veuillez remplir tous les champs");
+    //             toast.warn("Veuillez remplir tous les champs !!!")
+    //             return;
+    //         }
+
+    //         const response = await axios.post('http://localhost:8888/hosto-project/medecin/add_consultation.php', {
+    //             numerodossier,
+    //             diagnostic,
+    //             prescription,
+    //             acteMedical,
+    //             dateControle,
+    //             observations,
+    //         },
+    //             {
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 }
+    //             }
+    //         );
+    //         console.log(response.data)
+    //         if (response.data.status === "success") {
+    //             toast.info(response.data.message)
+    //             setDiagnostic("")
+    //             setPrescription("")
+    //             setActeMedical("")
+    //             setDateControle("")
+    //             setObservations("")
+    //         } else {
+    //             toast.error(response.data.message)
+    //             setError(response.data.message);
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //         toast.warn(error)
+    //         setError("Erreur lors de l'ajout de la consultation");
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         // Vérifier que la date de contrôle est une date future
         const today = new Date().toISOString().split('T')[0];
         if (dateControle <= today) {
@@ -52,20 +118,20 @@ const ConsultationDetails = () => {
             return;
         }
         try {
-            if (!diagnostic || !prescription || !actemedical || !constantes || !dateControle || !observations) {
+            if (!diagnostic || !prescription || !acteMedical || !dateControle || !observations) {
                 setError("Veuillez remplir tous les champs");
                 toast.warn("Veuillez remplir tous les champs !!!")
                 return;
             }
 
+            // Envoi des données du formulaire au serveur
             const response = await axios.post('http://localhost:8888/hosto-project/medecin/add_consultation.php', {
                 numerodossier,
                 diagnostic,
                 prescription,
-                actemedical,
+                acteMedical,
                 dateControle,
                 observations,
-                constantes
             },
                 {
                     headers: {
@@ -73,23 +139,31 @@ const ConsultationDetails = () => {
                     }
                 }
             );
-            console.log(response.data)
+
+            // Si l'ajout de la consultation est réussi, planifier un rendez-vous avec le médecin
             if (response.data.status === "success") {
-                toast.info(response.data.message)
-                setDiagnostic("")
-                setPrescription("")
-                setActeMedical("")
-                setDateControle("")
-                setObservations("")
-                setConstantes("")
-                // Rediriger ou afficher un message de succès
+                const rendezVousResponse = await axios.post('http://localhost:8888/hosto-project/medecin/planifier_rdv.php', {
+                    numerodossier,
+                    dateControle
+                });
+                if (rendezVousResponse.data.status === "success") {
+                    toast.info(rendezVousResponse.data.message);
+                } else {
+                    toast.error(rendezVousResponse.data.message);
+                }
+                // Réinitialiser les champs du formulaire après la soumission réussie
+                setDiagnostic("");
+                setPrescription("");
+                setActeMedical("");
+                setDateControle("");
+                setObservations("");
             } else {
-                toast.error(response.data.message)
+                toast.error(response.data.message);
                 setError(response.data.message);
             }
         } catch (error) {
-            console.log(error)
-            toast.warn(error)
+            console.log(error);
+            toast.warn("Erreur lors de l'ajout de la consultation");
             setError("Erreur lors de l'ajout de la consultation");
         }
     };
@@ -112,10 +186,10 @@ const ConsultationDetails = () => {
                         <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-blue-900 font-semibold rounded-lg block w-full p-2.5">Groupe sanguin : {patientData.GROUPESANGUIN}</p>
                         <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-blue-900 font-semibold rounded-lg block w-full p-2.5">Antécédants : {patientData.ANTECEDANTS}</p>
                         <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-blue-900 font-semibold rounded-lg block w-full p-2.5">Habitation : {patientData.HABITATION}</p>
-                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Temperature : {patientData.temperature} °</p>
-                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Tension :{patientData.tension} mm Hg</p>
-                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Poids : {patientData.poids} kg</p>
-                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Taille : {patientData.taille} cm</p>
+                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Temperature : {constantData ? constantData.temperature + " °" : 'N/A'}</p>
+                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Tension :{constantData ? constantData.tension + " mm Hg" : 'N/A'}</p>
+                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Poids : {constantData ? constantData.poids + " kg" : 'N/A'}</p>
+                        <p className="bg-gray-50 border-0 border-gray-300 leading-tight text-red-900 font-semibold rounded-lg block w-full p-2.5">Taille : {constantData ? constantData.taille + " cm" : 'N/A'}</p>
                     </div>
                 ) : (
                     <p className="text-red-500">{error ? error : "Aucune information disponible"}</p>
@@ -159,20 +233,8 @@ const ConsultationDetails = () => {
                             type="text"
                             name="acteMedical"
                             id="acteMedical"
-                            value={actemedical}
+                            value={acteMedical}
                             onChange={(e) => setActeMedical(e.target.value)}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="constantes" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Constantes</label>
-                        <input
-                            required
-                            type="text"
-                            name="constantes"
-                            id="constantes"
-                            value={constantes}
-                            onChange={(e) => setConstantes(e.target.value)}
                             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         />
                     </div>
@@ -206,10 +268,13 @@ const ConsultationDetails = () => {
                         Enregistrer
                     </button>
                 </form>
-
             </div>
+
         </div>
     );
 };
 
 export default ConsultationDetails;
+
+
+
